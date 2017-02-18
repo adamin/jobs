@@ -17,9 +17,9 @@ class TestDirectedGraph < Test::Unit::TestCase
   def test_add_edge
     @dgraph.add_edge('a', 'b');
 
-    vertex_a = @dgraph.find_vertex('a')
-    vertex_b = @dgraph.find_vertex('b')
+    vertex_a = @dgraph.find_index_for_vertex('a')
+    vertex_b = @dgraph.find_index_for_vertex('b')
 
-    assert(@dgraph.vertices[vertex_a].neighbors[vertex_b] == true && @dgraph.vertices[vertex_b].neighbors[vertex_a] == nil)
+    assert(@dgraph.vertices[vertex_a].neighbours[vertex_b] == true && @dgraph.vertices[vertex_b].neighbours[vertex_a] == nil)
   end
 end

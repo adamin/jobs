@@ -29,17 +29,17 @@ class TestGraph < Test::Unit::TestCase
 
     found_vertex = @graph.find_vertex('e')
 
-    assert(@graph.vertices.first.name == 'e')
+    assert(found_vertex.name == 'e')
   end
 
   # Tests adding a new edge to the graph
   def test_add_edge
     @graph.add_edge('a', 'b');
 
-    vertex_a = @graph.find_vertex('a')
-    vertex_b = @graph.find_vertex('b')
+    vertex_a = @graph.find_index_for_vertex('a')
+    vertex_b = @graph.find_index_for_vertex('b')
 
-    assert(@graph.vertices[vertex_a].neighbors[vertex_b] == true && @graph.vertices[vertex_b].neighbors[vertex_a] == true)
+    assert(@graph.vertices[vertex_a].neighbours[vertex_b] == true && @graph.vertices[vertex_b].neighbours[vertex_a] == true)
   end
 
   # Tests adding a new edge to itself
@@ -70,10 +70,10 @@ class TestGraph < Test::Unit::TestCase
     @graph.add_edge('b', 'c');
     @graph.add_edge('c', 'a');
 
-    vertex_a = @graph.find_vertex('a')
-    vertex_c = @graph.find_vertex('c')
+    vertex_a = @graph.find_index_for_vertex('a')
+    vertex_c = @graph.find_index_for_vertex('c')
 
-    assert(@graph.vertices[vertex_a].neighbors[vertex_c] == true && @graph.vertices[vertex_c].neighbors[vertex_a] == true)
+    assert(@graph.vertices[vertex_a].neighbours[vertex_c] == true && @graph.vertices[vertex_c].neighbours[vertex_a] == true)
   end
 
   # Test add edge attempt when graph is empty
