@@ -63,6 +63,6 @@ class TestDirectedGraph < Test::Unit::TestCase
     @dgraph.add_vertex(vertex_c)
     @dgraph.add_vertex(vertex_d)
 
-    assert(@dgraph.find_indexes_of_source_vertices == [2,3])
+    assert(@dgraph.find_indexes_of_source_vertices == [0,2,3])
   end
 end

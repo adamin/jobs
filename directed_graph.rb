@@ -14,7 +14,19 @@ class DirectedGraph < Graph
 
   # Public: finds source vertices - those that don't have any incoming edges
   def find_indexes_of_source_vertices
+    indexes = []
+    @vertices.each_index do |index|
+      indexes << index;
+    end
+    @vertices.each do |vertex|
+      vertex.neighbours.each_with_index do |value, neighbour_index|
+        if (value == true)
+          indexes = indexes - [neighbour_index]
+        end
+      end
+    end
 
+    indexes
   end
 
   # Public: Adds a new edge to the graph. Overrides method from the parent.
