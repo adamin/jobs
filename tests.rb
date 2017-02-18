@@ -7,7 +7,7 @@ class TestJobsCollection < Test::Unit::TestCase
     collection = JobsCollection.new ''
     sequence = collection.getSequence()
 
-    assert_equal '', sequence
+    assert_equal [], sequence
   end
 
   # Tests handling of self dependent jobs
@@ -31,5 +31,55 @@ class TestJobsCollection < Test::Unit::TestCase
     end
 
     assert_equal('Jobs must not create circular dependencies', exception.message)
+  end
+
+  # Test scenario where only one job is provided
+  def test_single
+    collection = JobsCollection.new({'a'=>nil})
+    sequence = collection.getSequence()
+
+    assert_equal ['a'], sequence
+  end
+
+  # Test scenario where multiple jobs are provided with no dependencies between them
+  def test_no_dependencies
+    collection = JobsCollection.new({'a'=>nil, 'b'=>nil, 'c'=>nil})
+    sequence = collection.getSequence()
+
+    assert(['a','b','c'] == sequence.sort)
+  end
+
+  # Test scenario where multiple jobs are provided with one dependency
+  def test_one_dependency
+    collection = JobsCollection.new({'a'=>nil, 'b'=>'c', 'c'=>nil})
+    sequence = collection.getSequence()
+
+    assert(['a','c','b'] == sequence || ['c','b','a'] == sequence || ['c','a','b'] == sequence)
+  end
+
+  # Test scenario where multiple jobs are provided with multiple dependencies
+  def test_multiple_dependencies
+    collection = JobsCollection.new({'a'=>nil, 'b'=>'c', 'c'=>'f', 'd'=>'a', 'e'=>'b', 'f'=>nil})
+    sequence = collection.getSequence()
+
+    assert(['a','d','f','c','b','e'] == sequence ||
+           ['a','f','d','c','b','e'] == sequence ||
+           ['a','f','c','d','b','e'] == sequence ||
+           ['a','f','c','b','d','e'] == sequence ||
+           ['a','f','c','b','e','d'] == sequence ||
+
+           ['f','a','d','c','b','e'] == sequence ||
+           ['f','a','c','d','b','e'] == sequence ||
+           ['f','a','c','b','d','e'] == sequence ||
+           ['f','a','c','b','e','d'] == sequence ||
+
+           ['f','c','a','d','b','e'] == sequence ||
+           ['f','c','a','b','d','e'] == sequence ||
+           ['f','c','a','b','e','d'] == sequence ||
+
+           ['f','c','b','a','d','e'] == sequence ||
+           ['f','c','b','a','e','d'] == sequence ||
+
+           ['f','c','b','e','a','d'] == sequence)
   end
 end
