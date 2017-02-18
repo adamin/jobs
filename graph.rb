@@ -80,4 +80,28 @@ class Graph
     self
   end
 
+  # Public: removes an edge from the graph
+  #
+  # start_vertex_name   - name of the starting vertex
+  # end_vertex_name     - name of the ending vertex
+  #
+  def remove_edge(start_vertex_name, end_vertex_name)
+
+    first_vertex_index = self.find_index_for_vertex(start_vertex_name)
+    second_vertex_index = self.find_index_for_vertex(end_vertex_name)
+
+    if (first_vertex_index == nil)
+      raise ArgumentError, 'Edge removal error. First vertex could not be found'
+    end
+
+    if (second_vertex_index == nil)
+      raise ArgumentError, 'Edge removal error. Second vertex could not be found'
+    end
+
+    @vertices[first_vertex_index].neighbours[second_vertex_index] = nil
+    @vertices[second_vertex_index].neighbours[first_vertex_index] = nil
+
+    self
+  end
+
 end

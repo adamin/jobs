@@ -42,27 +42,6 @@ class TestGraph < Test::Unit::TestCase
     assert(@graph.vertices[vertex_a].neighbours[vertex_b] == true && @graph.vertices[vertex_b].neighbours[vertex_a] == true)
   end
 
-  # Tests adding a new edge to itself
-  def test_add_edge_to_itself_no_cycles
-    exception = assert_raises ArgumentError do
-      @graph.add_edge('b', 'b');
-    end
-
-    assert_equal('Attempt to create a cycle in a cycleless graph', exception.message)
-  end
-
-  # Tests adding a new edge to a cycleless graph
-  def test_add_edge_no_cycles
-    @graph.add_edge('a', 'b');
-    @graph.add_edge('b', 'c');
-
-    exception = assert_raises ArgumentError do
-      @graph.add_edge('c', 'a');
-    end
-
-    assert_equal('Attempt to create a cycle in a cycleless graph', exception.message)
-  end
-
   # Tests adding a new cycle to the graph
   def test_add_edge_with_cycles
     @graph.allow_cycles = true;
@@ -104,6 +83,36 @@ class TestGraph < Test::Unit::TestCase
     end
 
     assert_equal('Edge cannot be added. Second vertex could not be found', exception.message)
+  end
+
+  # Tests removing an edge from the graph
+  def test_remove_edge
+    @graph.remove_edge('a','b')
+
+    vertex_a = @graph.find_index_for_vertex('a')
+    vertex_b = @graph.find_index_for_vertex('b')
+
+    assert(@graph.vertices[vertex_a].neighbours[vertex_b] == nil && @graph.vertices[vertex_b].neighbours[vertex_a] == nil)
+  end
+
+  # Tests removing an edge from the graph when first vertex is missing
+  def test_remove_edge_first_vertex_missing
+
+    exception = assert_raises ArgumentError do
+      @graph.remove_edge('z','a')
+    end
+
+    assert_equal('Edge removal error. First vertex could not be found', exception.message)
+  end
+
+  # Tests removing an edge from the graph when second vertex is missing
+  def test_remove_edge_second_vertex_missing
+
+    exception = assert_raises ArgumentError do
+      @graph.remove_edge('a','z')
+    end
+
+    assert_equal('Edge removal error. Second vertex could not be found', exception.message)
   end
 
 end
