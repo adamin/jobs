@@ -32,6 +32,18 @@ class TestGraph < Test::Unit::TestCase
     assert(found_vertex.name == 'e')
   end
 
+  # Tests adding the same vertex twice to the graph
+  def test_add_vertex_twice
+    vertex = Vertex.new('x')
+    @graph.add_vertex(vertex)
+
+    exception = assert_raises ArgumentError do
+      @graph.add_vertex(vertex)
+    end
+
+    assert_equal('Vertex with this name already exists in the graph', exception.message)
+  end
+
   # Tests adding a new edge to the graph
   def test_add_edge
     @graph.add_edge('a', 'b');
