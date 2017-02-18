@@ -74,8 +74,18 @@ class Graph
       raise ArgumentError, 'Edge cannot be added. Second vertex could not be found'
     end
 
-    @vertices[first_vertex_index].neighbours[second_vertex_index] = true
-    @vertices[second_vertex_index].neighbours[first_vertex_index] = true
+    self.add_edge_by_indexes(first_vertex_index,second_vertex_index)
+  end
+
+  # Public: adds an edge to the graph by their indexes.
+  #
+  # start_vertex_index   - index of the starting vertex
+  # end_vertex_index     - index of the ending vertex
+  #
+  def add_edge_by_indexes(start_vertex_index, end_vertex_index)
+
+    @vertices[start_vertex_index].neighbours[end_vertex_index] = true
+    @vertices[end_vertex_index].neighbours[start_vertex_index] = true
 
     self
   end
@@ -98,8 +108,18 @@ class Graph
       raise ArgumentError, 'Edge removal error. Second vertex could not be found'
     end
 
-    @vertices[first_vertex_index].neighbours[second_vertex_index] = nil
-    @vertices[second_vertex_index].neighbours[first_vertex_index] = nil
+    self.remove_edge_by_indexes(first_vertex_index, second_vertex_index)
+  end
+
+  # Public: removes an edge from the graph by their indexes.
+  #
+  # start_vertex_index   - index of the starting vertex
+  # end_vertex_index     - index of the ending vertex
+  #
+  def remove_edge_by_indexes(start_vertex_index, end_vertex_index)
+
+    @vertices[start_vertex_index].neighbours[end_vertex_index] = nil
+    @vertices[end_vertex_index].neighbours[start_vertex_index] = nil
 
     self
   end
