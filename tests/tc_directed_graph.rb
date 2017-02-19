@@ -132,4 +132,20 @@ class TestDirectedGraph < Test::Unit::TestCase
 
     assert(graph.to_s == 'a=>b,b=>,c=>b')
   end
+
+  # Tests building a graph from hash
+  def test_build_from_hash
+    graph = Graph.new
+    graph.build({'a'=>nil,'b'=>'c','c'=>nil})
+
+    assert(graph.to_s == 'a=>,b=>c,c=>')
+  end
+
+  # Tests building a graph from string
+  def test_build_from_string
+    graph = Graph.new
+    graph.build('a=>,b=>c,c=>')
+
+    assert(graph.to_s == 'a=>,b=>c,c=>')
+  end
 end

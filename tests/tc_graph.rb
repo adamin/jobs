@@ -189,9 +189,17 @@ class TestGraph < Test::Unit::TestCase
   # Tests building a graph from hash
   def test_build_from_hash
     graph = Graph.new
-    graph.build({'a'=>nil,'b'=>'c','c'=>nil})
+    graph.build({'a'=>'b','c'=>'b'})
 
-    assert(graph.to_s == 'a=>,b=>c,c=>')
+    assert(graph.to_s == 'a=>b,b=>a,b=>c,c=>b')
+  end
+
+  # Tests building a graph from string
+  def test_build_from_string
+    graph = Graph.new
+    graph.build('a=>b,c=>b')
+
+    assert(graph.to_s == 'a=>b,b=>a,b=>c,c=>b')
   end
 
 end
