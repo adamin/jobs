@@ -2,7 +2,6 @@ require 'test/unit'
 
 require_relative '../graph.rb'
 require_relative '../vertex.rb'
-
 class TestGraph < Test::Unit::TestCase
   # Let's create a graph with a vertex named 'a'
   def setup
@@ -155,6 +154,44 @@ class TestGraph < Test::Unit::TestCase
     graph = Graph.new
 
     assert(graph.has_edges() == false)
+  end
+
+  # Tests building string representation of a graph
+  def test_to_s
+    graph = Graph.new
+    vertex_a = Vertex.new('a')
+    vertex_b = Vertex.new('b')
+    vertex_c = Vertex.new('c')
+    graph.add_vertex(vertex_a).add_vertex(vertex_b).add_vertex(vertex_c)
+    graph.add_edge('a','b').add_edge('c','b')
+
+    assert(graph.to_s == 'a=>b,c=>b')
+  end
+
+  # Tests building string representation of an empty graph
+  def test_to_s_empty_graph
+    graph = Graph.new
+
+    assert(graph.to_s == '')
+  end
+
+  # Tests building string representation of a graph with no edges
+  def test_to_s_only_vertices
+    graph = Graph.new
+    vertex_a = Vertex.new('a')
+    vertex_b = Vertex.new('b')
+    vertex_c = Vertex.new('c')
+    graph.add_vertex(vertex_a).add_vertex(vertex_b).add_vertex(vertex_c)
+
+    assert(graph.to_s == 'a=>,b=>,c=>')
+  end
+
+  # Tests building a graph from hash
+  def test_build_from_hash
+    graph = Graph.new
+    graph.build({'a'=>nil,'b'=>'c','c'=>nil})
+
+    assert(graph.to_s == 'a=>,b=>c,c=>')
   end
 
 end
