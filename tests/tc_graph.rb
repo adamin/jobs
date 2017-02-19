@@ -165,7 +165,7 @@ class TestGraph < Test::Unit::TestCase
     graph.add_vertex(vertex_a).add_vertex(vertex_b).add_vertex(vertex_c)
     graph.add_edge('a','b').add_edge('c','b')
 
-    assert(graph.to_s == 'a=>b,c=>b')
+    assert(graph.to_s == 'a=>b,b=>a,b=>c,c=>b')
   end
 
   # Tests building string representation of an empty graph

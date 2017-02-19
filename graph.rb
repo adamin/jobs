@@ -15,6 +15,31 @@ class Graph
     @vertices = []
   end
 
+  # Public: creates a string representation of the graph
+  def to_s
+    result = ''
+
+    # Return an empty string for an empty graph
+    return result unless @vertices.length > 0
+
+    @vertices.each do |vertex|
+      added = false
+      vertex.neighbours.each_with_index do |value, neighbour_index|
+        if (value == true)
+          added = true
+          result << vertex.name << '=>' << @vertices[neighbour_index].name << ','
+        end
+      end
+      # if there has been no edges for the vertex
+      result << vertex.name << '=>,' unless added
+    end
+
+    # remove trailing comma
+    result = result.chop unless result.length == 0
+
+    result
+  end
+
   # Public: Adds a new vertex to the graph.
   #
   # vertex  - instance of Vertex class to add

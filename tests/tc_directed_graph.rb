@@ -120,4 +120,16 @@ class TestDirectedGraph < Test::Unit::TestCase
   def test_check_if_vertex_is_source_when_it_doesnt_exist
     assert(@dgraph.check_if_vertex_is_source(100) == false)
   end
+
+  # Tests building string representation of a graph
+  def test_to_s
+    graph = DirectedGraph.new
+    vertex_a = Vertex.new('a')
+    vertex_b = Vertex.new('b')
+    vertex_c = Vertex.new('c')
+    graph.add_vertex(vertex_a).add_vertex(vertex_b).add_vertex(vertex_c)
+    graph.add_edge('a','b').add_edge('c','b')
+
+    assert(graph.to_s == 'a=>b,b=>,c=>b')
+  end
 end
