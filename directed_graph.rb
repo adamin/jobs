@@ -1,5 +1,6 @@
 require_relative 'graph'
 require_relative 'vertex'
+require_relative 'graph_error'
 
 # Represents directed graph data structure -
 # a graph where edges can be traversed in one direction only.
@@ -18,6 +19,10 @@ class DirectedGraph < Graph
   # end_vertex_name     - name of the ending vertex
   #
   def add_edge_by_indexes(start_vertex_index, end_vertex_index)
+
+    if (@allow_cycles == false && start_vertex_index == end_vertex_index)
+      raise GraphError.new('Edge cannot be added. Allowing cycles is disabled and edge would create a self-dependency', GraphError::ERROR_DEPENDENCY_ON_ITSELF)
+    end
 
     @vertices[start_vertex_index].neighbours[end_vertex_index] = true
 
@@ -105,7 +110,7 @@ class DirectedGraph < Graph
       end
     end
 
-    raise ArgumentError, 'Topological sort could not be performed. Graph has at least one cycle' unless !graph.has_edges()
+    raise GraphError.new('Topological sort could not be performed. Graph has at least one cycle', GraphError::ERROR_UNEXPECTED_CYCLE) unless !graph.has_edges()
 
     result
   end

@@ -1,4 +1,5 @@
 require_relative 'vertex'
+require_relative 'graph_error'
 
 # Represents graph data structure.
 #
@@ -51,7 +52,7 @@ class Graph
     when Hash
       self.build_from_hash(data)
     else
-      raise TypeError, 'Unsupported data type for build function'
+    raise TypeError, 'Unsupported data type for build function'
     end
   end
 
@@ -70,7 +71,7 @@ class Graph
       if (items.length == 1)
         hash[items[0]] = nil
       else
-        hash[items[0]] = items[1]
+      hash[items[0]] = items[1]
       end
     end
 
@@ -86,7 +87,7 @@ class Graph
     # check if vertex is not already in the graph
       if (self.find_index_for_vertex(start_vertex_name) == nil )
         start_vertex = Vertex.new(start_vertex_name)
-        self.add_vertex(start_vertex)
+      self.add_vertex(start_vertex)
       end
 
       # if end vertex is specified
@@ -94,11 +95,11 @@ class Graph
         # and is not already in the graph
         if (self.find_index_for_vertex(end_vertex_name) == nil)
           end_vertex = Vertex.new(end_vertex_name)
-          self.add_vertex(end_vertex)
+        self.add_vertex(end_vertex)
         end
 
-        # add an edge between vertices
-        self.add_edge(start_vertex_name, end_vertex_name)
+      # add an edge between vertices
+      self.add_edge(start_vertex_name, end_vertex_name)
       end
     end
 
@@ -111,7 +112,7 @@ class Graph
   #
   def add_vertex(vertex)
     raise TypeError, 'Argument is not an instance of Vertex' unless vertex.instance_of? Vertex
-    raise ArgumentError, 'Vertex with this name already exists in the graph' unless self.find_index_for_vertex(vertex.name) == nil
+    raise GraphError.new('Vertex with this name already exists in the graph', GraphError::ERROR_DUPLICATE_VERTEX) unless self.find_index_for_vertex(vertex.name) == nil
 
     @vertices << vertex
 
@@ -149,18 +150,18 @@ class Graph
 
     # Check if graph is not empty
     if (@vertices.length == 0)
-      raise ArgumentError, 'No edges can be added to an empty graph'
+      raise GraphError.new('No edges can be added to an empty graph', GraphError::ERROR_ADD_EDGE_FAILURE)
     end
 
     first_vertex_index = self.find_index_for_vertex(start_vertex_name)
     second_vertex_index = self.find_index_for_vertex(end_vertex_name)
 
     if (first_vertex_index == nil)
-      raise ArgumentError, 'Edge cannot be added. First vertex could not be found'
+      raise GraphError.new('Edge cannot be added. First vertex could not be found', GraphError::ERROR_ADD_EDGE_FAILURE)
     end
 
     if (second_vertex_index == nil)
-      raise ArgumentError, 'Edge cannot be added. Second vertex could not be found'
+      raise GraphError.new('Edge cannot be added. Second vertex could not be found', GraphError::ERROR_ADD_EDGE_FAILURE)
     end
 
     self.add_edge_by_indexes(first_vertex_index,second_vertex_index)
@@ -172,6 +173,10 @@ class Graph
   # end_vertex_index     - index of the ending vertex
   #
   def add_edge_by_indexes(start_vertex_index, end_vertex_index)
+
+    if (@allow_cycles == false && start_vertex_index == end_vertex_index)
+      raise GraphError.new('Edge cannot be added. Allowing cycles is disabled and edge would create a self-dependency', GraphError::ERROR_DEPENDENCY_ON_ITSELF)
+    end
 
     @vertices[start_vertex_index].neighbours[end_vertex_index] = true
     @vertices[end_vertex_index].neighbours[start_vertex_index] = true
@@ -190,11 +195,11 @@ class Graph
     second_vertex_index = self.find_index_for_vertex(end_vertex_name)
 
     if (first_vertex_index == nil)
-      raise ArgumentError, 'Edge removal error. First vertex could not be found'
+      raise GraphError.new('Edge removal error. First vertex could not be found', GraphError::ERROR_REMOVE_EDGE_FAILURE)
     end
 
     if (second_vertex_index == nil)
-      raise ArgumentError, 'Edge removal error. Second vertex could not be found'
+      raise GraphError.new('Edge removal error. Second vertex could not be found', GraphError::ERROR_REMOVE_EDGE_FAILURE)
     end
 
     self.remove_edge_by_indexes(first_vertex_index, second_vertex_index)
