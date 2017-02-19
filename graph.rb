@@ -40,6 +40,71 @@ class Graph
     result
   end
 
+  # Public: builds a graph according to data provided
+  #
+  # data  - representation of a graph, supported types are: hash and string
+  #
+  def build(data)
+    case data
+    when String
+      self.build_from_string(data)
+    when Hash
+      self.build_from_hash(data)
+    else
+      raise TypeError, 'Unsupported data type for build function'
+    end
+  end
+
+  # Public: builds a graph from a string provided
+  #
+  # data  - string representation of a graph
+  #
+  def build_from_string(data)
+    # convert the string to a hash and build from it
+    hash = {}
+    pairs = data.split(',')
+
+    pairs.each do |value|
+      items = value.split('=>')
+
+      if (items.length == 1)
+        hash[items[0]] = nil
+      else
+        hash[items[0]] = items[1]
+      end
+    end
+
+    self.build_from_hash(hash)
+  end
+
+  # Public: builds a graph from a hash provided
+  #
+  # data  - hash representation of a graph
+  #
+  def build_from_hash(data)
+    data.each do |start_vertex_name, end_vertex_name|
+    # check if vertex is not already in the graph
+      if (self.find_index_for_vertex(start_vertex_name) == nil )
+        start_vertex = Vertex.new(start_vertex_name)
+        self.add_vertex(start_vertex)
+      end
+
+      # if end vertex is specified
+      if (end_vertex_name != nil)
+        # and is not already in the graph
+        if (self.find_index_for_vertex(end_vertex_name) == nil)
+          end_vertex = Vertex.new(end_vertex_name)
+          self.add_vertex(end_vertex)
+        end
+
+        # add an edge between vertices
+        self.add_edge(start_vertex_name, end_vertex_name)
+      end
+    end
+
+    self
+  end
+
   # Public: Adds a new vertex to the graph.
   #
   # vertex  - instance of Vertex class to add
