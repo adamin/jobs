@@ -233,4 +233,13 @@ class Graph
     return false
   end
 
+  def convert_indexes_to_names(indexes)
+    result = []
+    indexes.each do |index|
+      result << @vertices[index].name
+    end
+
+    result
+  end
+
 end
