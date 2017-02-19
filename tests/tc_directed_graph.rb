@@ -66,6 +66,7 @@ class TestDirectedGraph < Test::Unit::TestCase
     assert(@dgraph.find_indexes_of_source_vertices == [0,2,3])
   end
 
+  # Tests performing topological sort for the graph
   def test_topological_sort
     @dgraph = DirectedGraph.new
     vertex_a = Vertex.new('a')
@@ -78,6 +79,7 @@ class TestDirectedGraph < Test::Unit::TestCase
     assert(@dgraph.perform_topological_sort() == [1,0,4,2])
   end
 
+  # Tests performing topological sort for the graph when there is a cycle
   def test_topological_sort_cycle
     @dgraph = DirectedGraph.new
     vertex_a = Vertex.new('a')
@@ -92,5 +94,30 @@ class TestDirectedGraph < Test::Unit::TestCase
     end
 
     assert_equal('Topological sort could not be performed. Graph has at least one cycle', exception.message)
+  end
+
+  # Tests performing check if vertex is a source
+  def test_check_if_vertex_is_source
+    @dgraph = DirectedGraph.new
+    vertex_a = Vertex.new('a')
+    vertex_b = Vertex.new('b')
+    vertex_c = Vertex.new('c')
+    vertex_d = Vertex.new('d')
+    @dgraph.add_vertex(vertex_a).add_vertex(vertex_b).add_vertex(vertex_c).add_vertex(vertex_d)
+    @dgraph.add_edge('a', 'd').add_edge('d', 'c')
+
+    assert(@dgraph.check_if_vertex_is_source(0) == true && @dgraph.check_if_vertex_is_source(1) == true)
+  end
+
+  # Tests performing check if vertex is a source when it's not
+  # depends on setup from previous test
+  def test_check_if_vertex_is_source_when_not_source
+    assert(@dgraph.check_if_vertex_is_source(2) == false && @dgraph.check_if_vertex_is_source(3) == false)
+  end
+
+  # Tests performing check if vertex is a source when it doesn't exist
+  # depends on setup from previous test
+  def test_check_if_vertex_is_source_when_it_doesnt_exist
+    assert(@dgraph.check_if_vertex_is_source(100) == false)
   end
 end
