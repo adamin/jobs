@@ -20,11 +20,10 @@ class Graph
   # vertex  - instance of Vertex class to add
   #
   def add_vertex(vertex)
-    if (vertex.instance_of? Vertex)
+    raise TypeError, 'Argument is not an instance of Vertex' unless vertex.instance_of? Vertex
+    raise ArgumentError, 'Vertex with this name already exists in the graph' unless self.find_index_for_vertex(vertex.name) == nil
+
     @vertices << vertex
-    else
-      raise ArgumentError, 'Argument is not an instance of Vertex'
-    end
 
     self
   end
