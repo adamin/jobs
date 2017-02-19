@@ -202,4 +202,14 @@ class TestGraph < Test::Unit::TestCase
     assert(graph.to_s == 'a=>b,b=>a,b=>c,c=>b')
   end
 
+  def test_build_from_integer
+    graph = Graph.new
+
+    exception = assert_raises TypeError do
+      graph.build(1)
+    end
+
+    assert_equal('Unsupported data type for build function', exception.message)
+  end
+
 end
