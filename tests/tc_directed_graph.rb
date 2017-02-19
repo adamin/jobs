@@ -76,7 +76,7 @@ class TestDirectedGraph < Test::Unit::TestCase
     @dgraph.add_vertex(vertex_a).add_vertex(vertex_b).add_vertex(vertex_c).add_vertex(vertex_d)
     @dgraph.add_edge('a', 'd').add_edge('d', 'c')
 
-    assert(@dgraph.perform_topological_sort() == [1,0,4,2])
+    assert(@dgraph.perform_topological_sort() == [1,0,3,2])
   end
 
   # Tests performing topological sort for the graph when there is a cycle
