@@ -127,4 +127,34 @@ class TestGraph < Test::Unit::TestCase
     assert_equal('Edge removal error. Second vertex could not be found', exception.message)
   end
 
+  # Tests checking if there are edges in the graph
+  def test_has_edges
+    graph = Graph.new
+    vertex_a = Vertex.new('a')
+    vertex_b = Vertex.new('b')
+    vertex_c = Vertex.new('c')
+    graph.add_vertex(vertex_a).add_vertex(vertex_b).add_vertex(vertex_c)
+    graph.add_edge('b','c')
+
+    assert(graph.has_edges() == true)
+  end
+
+  # Tests checking if there are edges in the graph with vertices only
+  def test_has_edges_vertices_only
+    vertex_a = Vertex.new('a')
+    vertex_b = Vertex.new('b')
+    vertex_c = Vertex.new('c')
+    graph = Graph.new
+    graph.add_vertex(vertex_a).add_vertex(vertex_b).add_vertex(vertex_c)
+
+    assert(graph.has_edges() == false)
+  end
+
+  # Tests checking if there are edges in the graph while the graph is empty
+  def test_has_edges_when_empty
+    graph = Graph.new
+
+    assert(graph.has_edges() == false)
+  end
+
 end
