@@ -1,7 +1,9 @@
 require 'test/unit'
 
-require_relative '../graph.rb'
-require_relative '../vertex.rb'
+require_relative '../graph'
+require_relative '../vertex'
+require_relative '../graph_error'
+
 class TestGraph < Test::Unit::TestCase
   # Let's create a graph with a vertex named 'a'
   def setup
@@ -36,7 +38,7 @@ class TestGraph < Test::Unit::TestCase
     vertex = Vertex.new('x')
     @graph.add_vertex(vertex)
 
-    exception = assert_raises ArgumentError do
+    exception = assert_raises GraphError do
       @graph.add_vertex(vertex)
     end
 
@@ -70,7 +72,7 @@ class TestGraph < Test::Unit::TestCase
   def test_add_edge_no_vertices
     graph = Graph.new
 
-    exception = assert_raises ArgumentError do
+    exception = assert_raises GraphError do
       graph.add_edge('a','b')
     end
 
@@ -79,7 +81,7 @@ class TestGraph < Test::Unit::TestCase
 
   # Test add edge attempt when first of the vertices is missing
   def test_add_edge_first_vertex_missing
-    exception = assert_raises ArgumentError do
+    exception = assert_raises GraphError do
       @graph.add_edge('z','b')
     end
 
@@ -89,7 +91,7 @@ class TestGraph < Test::Unit::TestCase
   # Test add edge attempt when second of the vertices is missing
   def test_add_edge_second_vertex_missing
 
-    exception = assert_raises ArgumentError do
+    exception = assert_raises GraphError do
       @graph.add_edge('a','z')
     end
 
@@ -109,7 +111,7 @@ class TestGraph < Test::Unit::TestCase
   # Tests removing an edge from the graph when first vertex is missing
   def test_remove_edge_first_vertex_missing
 
-    exception = assert_raises ArgumentError do
+    exception = assert_raises GraphError do
       @graph.remove_edge('z','a')
     end
 
@@ -119,7 +121,7 @@ class TestGraph < Test::Unit::TestCase
   # Tests removing an edge from the graph when second vertex is missing
   def test_remove_edge_second_vertex_missing
 
-    exception = assert_raises ArgumentError do
+    exception = assert_raises GraphError do
       @graph.remove_edge('a','z')
     end
 

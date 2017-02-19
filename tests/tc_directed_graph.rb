@@ -1,7 +1,8 @@
 require 'test/unit'
 
-require_relative '../directed_graph.rb'
-require_relative '../vertex.rb'
+require_relative '../directed_graph'
+require_relative '../vertex'
+require_relative '../graph_error'
 
 class TestDirectedGraph < Test::Unit::TestCase
   # Let's create a directed graph instance for our tests
@@ -37,7 +38,7 @@ class TestDirectedGraph < Test::Unit::TestCase
   # Tests removing an edge from the graph when first vertex is missing
   def test_remove_edge_first_vertex_missing
 
-    exception = assert_raises ArgumentError do
+    exception = assert_raises GraphError do
       @dgraph.remove_edge('z','a')
     end
 
@@ -47,7 +48,7 @@ class TestDirectedGraph < Test::Unit::TestCase
   # Tests removing an edge from the graph when second vertex is missing
   def test_remove_edge_second_vertex_missing
 
-    exception = assert_raises ArgumentError do
+    exception = assert_raises GraphError do
       @dgraph.remove_edge('a','z')
     end
 
@@ -89,7 +90,7 @@ class TestDirectedGraph < Test::Unit::TestCase
     @dgraph.add_vertex(vertex_a).add_vertex(vertex_b).add_vertex(vertex_c).add_vertex(vertex_d)
     @dgraph.add_edge('a', 'b').add_edge('b', 'c').add_edge('c', 'a').add_edge('a', 'd');
 
-    exception = assert_raises ArgumentError do
+    exception = assert_raises GraphError do
       @dgraph.perform_topological_sort()
     end
 
