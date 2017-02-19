@@ -123,4 +123,19 @@ class Graph
     self
   end
 
+  # Public: performs a check to see if the graph has at least one edge
+  def has_edges
+    return false unless @vertices.length > 0
+
+    @vertices.each do |vertex|
+      vertex.neighbours.each do |neighbour|
+        if (neighbour == true)
+        return true
+        end
+      end
+    end
+
+    return false
+  end
+
 end
