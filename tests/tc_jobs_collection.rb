@@ -13,10 +13,8 @@ class TestJobsCollection < Test::Unit::TestCase
   # Tests handling of self dependent jobs
   # expects ArgumentError to be thrown
   def test_self_dependency
-    collection = JobsCollection.new({'a'=>nil, 'b'=>nil, 'c'=>'c'})
-
     exception = assert_raises ArgumentError do
-      collection.get_sequence()
+      collection = JobsCollection.new({'a'=>nil, 'b'=>nil, 'c'=>'c'})
     end
     assert_equal('Jobs must not depend on themselves', exception.message)
   end
@@ -46,7 +44,7 @@ class TestJobsCollection < Test::Unit::TestCase
     collection = JobsCollection.new({'a'=>nil, 'b'=>nil, 'c'=>nil})
     sequence = collection.get_sequence()
 
-    assert(sequence.is_a? Array && ['a','b','c'] == sequence.sort)
+    assert(sequence.is_a?(Array) && ['a','b','c'] == sequence.sort)
   end
 
   # Test scenario where multiple jobs are provided with one dependency

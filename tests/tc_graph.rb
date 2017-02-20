@@ -45,14 +45,31 @@ class TestGraph < Test::Unit::TestCase
     assert_equal('Vertex with this name already exists in the graph', exception.message)
   end
 
+  # Tests checking if there is a specified edge in the graph
+  def test_has_edge
+    @graph.add_edge('a', 'b');
+
+    assert(@graph.has_edge('a', 'b') == true)
+  end
+
+  # Tests checking if there is a specified edge in the graph when there is no such edge
+  def test_has_edge_no_edge
+    assert(@graph.has_edge('b', 'd') == false)
+  end
+
+  # Tests checking if there is a specified edge in the graph when vertices specified do not exist in the graph
+  def test_has_edge_no_vertices
+    assert(@graph.has_edge('vertex1', 'vertex2') == false)
+  end
+
   # Tests adding a new edge to the graph
   def test_add_edge
     @graph.add_edge('a', 'b');
+    vertex_a = @graph.find_vertex('a')
+    vertex_b = @graph.find_vertex('b')
 
-    vertex_a = @graph.find_index_for_vertex('a')
-    vertex_b = @graph.find_index_for_vertex('b')
-
-    assert(@graph.vertices[vertex_a].neighbours[vertex_b] == true && @graph.vertices[vertex_b].neighbours[vertex_a] == true)
+    # 0 and 1 are indexes of vertex a and vertex b respectively
+    assert(@graph.vertices[0].neighbours[1] == true && @graph.vertices[1].neighbours[0] == true)
   end
 
   # Tests adding a new cycle to the graph
@@ -62,10 +79,8 @@ class TestGraph < Test::Unit::TestCase
     @graph.add_edge('b', 'c');
     @graph.add_edge('c', 'a');
 
-    vertex_a = @graph.find_index_for_vertex('a')
-    vertex_c = @graph.find_index_for_vertex('c')
-
-    assert(@graph.vertices[vertex_a].neighbours[vertex_c] == true && @graph.vertices[vertex_c].neighbours[vertex_a] == true)
+    # 0 and 2 are indexes of vertex a and vertex c respectively
+    assert(@graph.vertices[0].neighbours[2] == true && @graph.vertices[2].neighbours[0] == true)
   end
 
   # Test add edge attempt when graph is empty
@@ -102,10 +117,8 @@ class TestGraph < Test::Unit::TestCase
   def test_remove_edge
     @graph.remove_edge('a','b')
 
-    vertex_a = @graph.find_index_for_vertex('a')
-    vertex_b = @graph.find_index_for_vertex('b')
-
-    assert(@graph.vertices[vertex_a].neighbours[vertex_b] == nil && @graph.vertices[vertex_b].neighbours[vertex_a] == nil)
+    # 0 and 1 are indexes of vertex a and vertex b respectively
+    assert(@graph.vertices[0].neighbours[1] == nil && @graph.vertices[1].neighbours[0] == nil)
   end
 
   # Tests removing an edge from the graph when first vertex is missing

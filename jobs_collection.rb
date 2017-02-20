@@ -27,7 +27,7 @@ class JobsCollection < DirectedGraph
   def get_sequence()
     result = []
     begin
-      result = self.convert_indexes_to_names(self.perform_topological_sort)
+      result = self.perform_topological_sort
     rescue GraphError => e
       case e.code
       when GraphError::ERROR_UNEXPECTED_CYCLE

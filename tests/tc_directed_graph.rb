@@ -18,10 +18,8 @@ class TestDirectedGraph < Test::Unit::TestCase
   def test_add_edge
     @dgraph.add_edge('a', 'b');
 
-    vertex_a = @dgraph.find_index_for_vertex('a')
-    vertex_b = @dgraph.find_index_for_vertex('b')
-
-    assert(@dgraph.vertices[vertex_a].neighbours[vertex_b] == true && @dgraph.vertices[vertex_b].neighbours[vertex_a] == nil)
+    # 0 and 1 are indexes of vertex a and vertex b respectively
+    assert(@dgraph.vertices[0].neighbours[1] == true && @dgraph.vertices[1].neighbours[0] == nil)
   end
 
   # Tests removing an edge from the graph
@@ -29,10 +27,8 @@ class TestDirectedGraph < Test::Unit::TestCase
     @dgraph.add_edge('a', 'b');
     @dgraph.remove_edge('a','b')
 
-    vertex_a = @dgraph.find_index_for_vertex('a')
-    vertex_b = @dgraph.find_index_for_vertex('b')
-
-    assert(@dgraph.vertices[vertex_a].neighbours[vertex_b] == nil)
+    # 0 and 1 are indexes of vertex a and vertex b respectively
+    assert(@dgraph.vertices[0].neighbours[1] == nil)
   end
 
   # Tests removing an edge from the graph when first vertex is missing
@@ -55,18 +51,6 @@ class TestDirectedGraph < Test::Unit::TestCase
     assert_equal('Edge removal error. Second vertex could not be found', exception.message)
   end
 
-  # Tests finding source vertices
-  def test_find_indexes_of_source_vertices
-    @dgraph.add_edge('a', 'b');
-
-    vertex_c = Vertex.new('c')
-    vertex_d = Vertex.new('d')
-    @dgraph.add_vertex(vertex_c)
-    @dgraph.add_vertex(vertex_d)
-
-    assert(@dgraph.find_indexes_of_source_vertices == [0,2,3])
-  end
-
   # Tests performing topological sort for the graph
   def test_topological_sort
     @dgraph = DirectedGraph.new
@@ -77,7 +61,7 @@ class TestDirectedGraph < Test::Unit::TestCase
     @dgraph.add_vertex(vertex_a).add_vertex(vertex_b).add_vertex(vertex_c).add_vertex(vertex_d)
     @dgraph.add_edge('a', 'd').add_edge('d', 'c')
 
-    assert(@dgraph.perform_topological_sort() == [1,0,3,2])
+    assert(@dgraph.perform_topological_sort() == ['b','a','d','c'])
   end
 
   # Tests performing topological sort for the graph when there is a cycle
@@ -107,19 +91,19 @@ class TestDirectedGraph < Test::Unit::TestCase
     @dgraph.add_vertex(vertex_a).add_vertex(vertex_b).add_vertex(vertex_c).add_vertex(vertex_d)
     @dgraph.add_edge('a', 'd').add_edge('d', 'c')
 
-    assert(@dgraph.check_if_vertex_is_source(0) == true && @dgraph.check_if_vertex_is_source(1) == true)
+    assert(@dgraph.check_if_vertex_is_source('a') == true && @dgraph.check_if_vertex_is_source('b') == true)
   end
 
   # Tests performing check if vertex is a source when it's not
   # depends on setup from previous test
   def test_check_if_vertex_is_source_when_not_source
-    assert(@dgraph.check_if_vertex_is_source(2) == false && @dgraph.check_if_vertex_is_source(3) == false)
+    assert(@dgraph.check_if_vertex_is_source('c') == false && @dgraph.check_if_vertex_is_source('d') == false)
   end
 
   # Tests performing check if vertex is a source when it doesn't exist
   # depends on setup from previous test
   def test_check_if_vertex_is_source_when_it_doesnt_exist
-    assert(@dgraph.check_if_vertex_is_source(100) == false)
+    assert(@dgraph.check_if_vertex_is_source('no_vertex') == false)
   end
 
   # Tests building string representation of a graph
