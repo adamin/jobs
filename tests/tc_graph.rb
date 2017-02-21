@@ -13,7 +13,6 @@ class TestGraph < Test::Unit::TestCase
     vertex_d = Vertex.new('d')
     @graph = Graph.new()
     @graph.vertices = [vertex_a, vertex_b, vertex_c, vertex_d]
-    @graph.allow_cycles = false
   end
 
   # Tests finding a vertex in the graph with specified name
@@ -74,7 +73,6 @@ class TestGraph < Test::Unit::TestCase
 
   # Tests adding a new cycle to the graph
   def test_add_edge_with_cycles
-    @graph.allow_cycles = true;
     @graph.add_edge('a', 'b');
     @graph.add_edge('b', 'c');
     @graph.add_edge('c', 'a');

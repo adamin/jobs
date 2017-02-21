@@ -51,36 +51,6 @@ class TestDirectedGraph < Test::Unit::TestCase
     assert_equal('Edge removal error. Second vertex could not be found', exception.message)
   end
 
-  # Tests performing topological sort for the graph
-  def test_topological_sort
-    @dgraph = DirectedGraph.new
-    vertex_a = Vertex.new('a')
-    vertex_b = Vertex.new('b')
-    vertex_c = Vertex.new('c')
-    vertex_d = Vertex.new('d')
-    @dgraph.add_vertex(vertex_a).add_vertex(vertex_b).add_vertex(vertex_c).add_vertex(vertex_d)
-    @dgraph.add_edge('a', 'd').add_edge('d', 'c')
-
-    assert(@dgraph.perform_topological_sort() == ['b','a','d','c'])
-  end
-
-  # Tests performing topological sort for the graph when there is a cycle
-  def test_topological_sort_cycle
-    @dgraph = DirectedGraph.new
-    vertex_a = Vertex.new('a')
-    vertex_b = Vertex.new('b')
-    vertex_c = Vertex.new('c')
-    vertex_d = Vertex.new('d')
-    @dgraph.add_vertex(vertex_a).add_vertex(vertex_b).add_vertex(vertex_c).add_vertex(vertex_d)
-    @dgraph.add_edge('a', 'b').add_edge('b', 'c').add_edge('c', 'a').add_edge('a', 'd');
-
-    exception = assert_raises GraphError do
-      @dgraph.perform_topological_sort()
-    end
-
-    assert_equal('Topological sort could not be performed. Graph has at least one cycle', exception.message)
-  end
-
   # Tests performing check if vertex is a source
   def test_check_if_vertex_is_source
     @dgraph = DirectedGraph.new

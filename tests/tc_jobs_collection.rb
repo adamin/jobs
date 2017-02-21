@@ -22,9 +22,8 @@ class TestJobsCollection < Test::Unit::TestCase
   # Tests handling of circular dependencies
   # expects ArgumentError to be thrown
   def test_cycle
-    collection = JobsCollection.new({'a'=>'b', 'b'=>'c', 'c'=>'a', 'd'=>'b'})
-
     exception = assert_raises ArgumentError do
+      collection = JobsCollection.new({'a'=>'b', 'b'=>'c', 'c'=>'a', 'd'=>'b'})
       collection.get_sequence()
     end
 

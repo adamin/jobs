@@ -1,7 +1,9 @@
+require_relative 'directed_acyclic_graph'
+
 # Represents a collection of jobs and dependencies between them.
 #
 # Extends DirectedGraph class.
-class JobsCollection < DirectedGraph
+class JobsCollection < DirectedAcyclicGraph
 
   # Public: Initialises the collection with data about jobs and their dependencies
   #
@@ -10,10 +12,11 @@ class JobsCollection < DirectedGraph
   def initialize(data)
     super()
     begin
-      self.allow_cycles = false
       self.build(data)
     rescue GraphError => e
       case e.code
+      when GraphError::ERROR_UNEXPECTED_CYCLE
+        raise ArgumentError,'Jobs must not create circular dependencies'
       when GraphError::ERROR_DEPENDENCY_ON_ITSELF
         raise ArgumentError,'Jobs must not depend on themselves'
       else
