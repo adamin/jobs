@@ -32,9 +32,7 @@ class Graph
     end
 
     # remove trailing comma
-    result = result.chop unless result.length == 0
-
-    result
+    result.chop
   end
 
   # Public: builds a graph according to data provided
@@ -230,10 +228,9 @@ class Graph
 
   # Private: finds source vertices - those that don't have any incoming edges
   def find_indexes_of_source_vertices
-    indexes = []
-    @vertices.each_index do |index|
-      indexes << index;
-    end
+    # start with all vertices' indexes
+    indexes = [*0..@vertices.length-1]
+
     @vertices.each do |vertex|
       vertex.neighbours.each_with_index do |value, neighbour_index|
         if (value == true)
@@ -250,6 +247,10 @@ class Graph
   # data  - string representation of a graph
   #
   def build_from_string(data)
+
+    # Check if string representation of the graph is valid
+    raise ArgumentError, 'String representation of the graph is invalid' unless data =~ /\A(|([a-z0-0A-Z]+=>[a-z0-0A-Z]*)(,[a-z0-0A-Z]+=>[a-z0-0A-Z]*)*)\z/
+
     # convert the string to a hash and build from it
     hash = {}
     pairs = data.split(',')
@@ -275,16 +276,14 @@ class Graph
     data.each do |start_vertex_name, end_vertex_name|
       # check if vertex is not already in the graph
       if (find_index_for_vertex(start_vertex_name) == nil )
-        start_vertex = Vertex.new(start_vertex_name)
-        self.add_vertex(start_vertex)
+        self.add_vertex(Vertex.new(start_vertex_name))
       end
 
       # if end vertex is specified
       if (end_vertex_name != nil)
         # and is not already in the graph
         if (find_index_for_vertex(end_vertex_name) == nil)
-          end_vertex = Vertex.new(end_vertex_name)
-          self.add_vertex(end_vertex)
+          self.add_vertex(Vertex.new(end_vertex_name))
         end
 
         # add an edge between vertices

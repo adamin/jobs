@@ -215,6 +215,45 @@ class TestGraph < Test::Unit::TestCase
     assert(graph.to_s == 'a=>b,b=>a,b=>c,c=>b')
   end
 
+  # Tests building a graph from string
+  def test_build_from_string2
+    graph = Graph.new
+    graph.build('a=>b')
+
+    assert(graph.to_s == 'a=>b,b=>a')
+  end
+
+  # Tests building a graph from string
+  def test_build_from_string3
+    graph = Graph.new
+    graph.build('a=>,c=>b')
+
+    assert(graph.to_s == 'a=>,c=>b,b=>c')
+  end
+
+  # Tests building a graph from string when string is invalid
+  def test_build_from_string_invalid
+    graph = Graph.new
+
+    exception = assert_raises ArgumentError do
+      graph.build('a=>c=>b')
+    end
+
+    assert_equal('String representation of the graph is invalid', exception.message)
+  end
+
+  # Tests building a graph from string when string is invalid
+  def test_build_from_string_invalid2
+    graph = Graph.new
+
+    exception = assert_raises ArgumentError do
+      graph.build('a=>b,=>b')
+    end
+
+    assert_equal('String representation of the graph is invalid', exception.message)
+  end
+
+  # Tests unsupported data type for graph build function
   def test_build_from_integer
     graph = Graph.new
 

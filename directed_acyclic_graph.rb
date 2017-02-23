@@ -63,7 +63,7 @@ class DirectedAcyclicGraph < DirectedGraph
 
       @vertices[start_vertex_index].neighbours[end_vertex_index] = true
 
-      # check if we haven't created a cycle
+      # check if adding the edge has not created a cycle
       begin
         self.perform_topological_sort
       rescue GraphError => e
