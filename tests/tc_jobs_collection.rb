@@ -79,4 +79,17 @@ class TestJobsCollection < Test::Unit::TestCase
 
            ['f','c','b','e','a','d'] == sequence)
   end
+
+  # Test scenario where a job depends on multiple other jobs
+  # and also where multiple jobs depend on the same job
+  def test_one_to_many_and_many_to_one
+    collection = JobsCollection.new('a=>e,b=>c,b=>e,c=>,e=>')
+    sequence = collection.get_sequence()
+
+    assert(['c','e','b','a'] == sequence ||
+           ['e','c','b','a'] == sequence ||
+           ['c','e','a','b'] == sequence ||
+           ['e','c','a','b'] == sequence ||
+           ['e','a','c','b'] == sequence)
+  end
 end

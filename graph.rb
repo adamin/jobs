@@ -251,21 +251,17 @@ class Graph
     # Check if string representation of the graph is valid
     raise ArgumentError, 'String representation of the graph is invalid' unless data =~ /\A(|([a-z0-0A-Z]+=>[a-z0-0A-Z]*)(,[a-z0-0A-Z]+=>[a-z0-0A-Z]*)*)\z/
 
-    # convert the string to a hash and build from it
-    hash = {}
     pairs = data.split(',')
 
     pairs.each do |value|
       items = value.split('=>')
+      self.add_vertex(Vertex.new(items[0])) unless find_index_for_vertex(items[0]) != nil
 
-      if (items.length == 1)
-        hash[items[0]] = nil
-      else
-        hash[items[0]] = items[1]
+      if (items.length == 2)
+        self.add_vertex(Vertex.new(items[1])) unless find_index_for_vertex(items[1]) != nil
+        self.add_edge(items[0],items[1])
       end
     end
-
-    build_from_hash(hash)
   end
 
   # Private: builds a graph from a hash provided
